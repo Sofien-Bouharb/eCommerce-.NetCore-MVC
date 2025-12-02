@@ -1,6 +1,7 @@
 ﻿namespace eCommerce.Models
 {
-    public class test
+    public class Test
     {
+        public int id { get; set; }
     }
 }
