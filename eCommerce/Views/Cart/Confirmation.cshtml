@@ -1,0 +1,23 @@
+﻿@model eCommerce.Models.Order
+
+<h2>Order Confirmation</h2>
+
+<p>Your order <strong>#@Model.Id</strong> was placed successfully!</p>
+<p><strong>Date:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+<p><strong>Total:</strong> @Model.Total DT</p>
+<p><strong>Shipping Address:</strong> @Model.ShippingAddress</p>
+
+<h4>Items:</h4>
+<ul>
+    @foreach (var item in Model.Items)
+    {
+        <li>
+            @item.Product.Name — Qty: @item.Quantity —
+            @(item.Quantity* item.UnitPrice) DT
+        </li>
+    }
+</ul>
+
+<a asp-controller="Orders" asp-action="History" class="btn btn-primary mt-3">
+    View My Orders
+</a>

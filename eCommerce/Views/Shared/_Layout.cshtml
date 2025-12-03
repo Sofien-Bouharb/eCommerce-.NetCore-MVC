@@ -21,7 +21,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-3">
             <div class="container-fluid">
                 <!-- Brand -->
-                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">eCommerce</a>
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="" asp-action="">eCommerce</a>
 
                 <!-- Hamburger for mobile -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
@@ -36,42 +36,92 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Products" asp-action="Index">Shop</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Products" asp-action="Categories">Categories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        
+                       
                     </ul>
 
                     <!-- Middle: search bar -->
-                    <form class="d-flex me-3" method="get" asp-controller="Products" asp-action="Search">
-                        <input class="form-control me-2" type="search" placeholder="Search products..." name="query">
+                    <form asp-controller="Products" asp-action="Index" method="get" class="d-flex me-3">
+                        <input type="hidden" name="categoryId" value="@ViewBag.SelectedCategory" />
+                        <input type="hidden" name="minPrice" value="@ViewBag.MinPrice" />
+                        <input type="hidden" name="maxPrice" value="@ViewBag.MaxPrice" />
+
+                        <input class="form-control me-2"
+                               type="search"
+                               placeholder="Search..."
+                               name="query"
+                               value="@ViewBag.Query" />
+
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </form>
+
+
+
+
 
                     <!-- Right: user account & cart -->
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <!-- User account -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                👤 Account
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" asp-controller="Account" asp-action="Login">Login</a></li>
-                                <li><a class="dropdown-item" asp-controller="Account" asp-action="Register">Register</a></li>
-                            </ul>
-                        </li>
+                        <!-- User account -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    👤 @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-area="Identity"
+                                           asp-page="/Account/Manage/Index">Manage Account</a>
+                                    </li>
 
-                        <!-- Cart -->
-                        <li class="nav-item">
-                            <a class="nav-link position-relative" asp-controller="Cart" asp-action="Index">
-                                🛒 Cart
-                                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
-                                    @CartHelper.GetCartCount(HttpContextAccessor.HttpContext.Session)
-                                </span>
-                            </a>
-                        </li>
+                                    <li>
+                                        <form method="post" asp-area="Identity" asp-page="/Account/Logout">
+                                            <button type="submit" class="dropdown-item text-danger">Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            <li>
+                                <a class="nav-link position-relative"
+                                   asp-controller="Orders"
+                                   asp-action="History">My Orders</a>
+                            </li>
+                            <!-- Cart -->
+                            <li class="nav-item">
+                                <a class="nav-link position-relative" asp-controller="Cart" asp-action="Index">
+                                    🛒 Cart
+                                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                        @CartHelper.GetCartCount(HttpContextAccessor.HttpContext.Session)
+                                    </span>
+                                </a>
+                            </li>
+
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    👤 Account
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-area="Identity"
+                                           asp-page="/Account/Login">Login</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                           asp-area="Identity"
+                                           asp-page="/Account/Register">Register</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+
+                       
                     </ul>
                 </div>
             </div>
@@ -86,7 +136,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - eCommerce - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - eCommerce - <a asp-area="" asp-controller="Home" asp-action="">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

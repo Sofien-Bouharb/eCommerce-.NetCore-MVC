@@ -21,21 +21,30 @@
 
             @if (ViewBag.InCart == true)
             {
+                <!-- REMOVE BUTTON -->
                 <a class="btn btn-danger btn-lg mt-4"
                    asp-controller="Cart"
-                   asp-action="Toggle"
+                   asp-action="Remove"
                    asp-route-id="@Model.Id">
                     Remove from Cart
                 </a>
             }
             else
             {
-                <a class="btn btn-success btn-lg mt-4"
-                   asp-controller="Cart"
-                   asp-action="Toggle"
-                   asp-route-id="@Model.Id">
-                    Add to Cart
-                </a>
+                <!-- ADD WITH QUANTITY -->
+                <form asp-controller="Cart" asp-action="Add" method="post" class="mt-4">
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <div class="d-flex align-items-center gap-3">
+                        <label><strong>Quantity:</strong></label>
+                        <input type="number" name="quantity" value="1" min="1"
+                               class="form-control" style="width: 80px;" />
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg mt-3">
+                        Add to Cart
+                    </button>
+                </form>
             }
 
         </div>
