@@ -33,7 +33,22 @@ else
                     </td>
                     <td>@item.Name</td>
                     <td>@item.Price.ToString("C")</td>
-                    <td>@item.Quantity</td>
+                    <td>
+                        <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="d-flex">
+                            <input type="hidden" name="id" value="@item.ProductId" />
+
+                            <input type="number" name="quantity"
+                                   value="@item.Quantity"
+                                   min="1"
+                                   class="form-control text-center"
+                                   style="width: 80px;" />
+
+                            <button type="submit" class="btn btn-sm btn-primary ms-2">
+                                Update
+                            </button>
+                        </form>
+                    </td>
+
                     <td>@(item.Price* item.Quantity).ToString("C")</td>
                     <td>
                         <a class="btn btn-danger"
@@ -43,8 +58,31 @@ else
                             Remove
                         </a>
                     </td>
+                    <td>@(item.Price* item.Quantity).ToString("C")</td>
+
                 </tr>
             }
         </tbody>
     </table>
+    
+    decimal total = Model.Sum(i => i.Price * i.Quantity);
+
+
+<tfoot>
+    <tr>
+        <td colspan="4" class="text-end"><strong>Total:</strong></td>
+        <td colspan="2"><strong>@total.ToString("C")</strong></td>
+    </tr>
+</tfoot>
+ <p></p>
+    @if (Model.Any())
+    {
+        <a class="btn btn-success btn-lg mt-3"
+           asp-controller="Cart"
+           asp-action="Checkout">
+            Proceed to Checkout
+        </a>
+    }
+
+
 }
